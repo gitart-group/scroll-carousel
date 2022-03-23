@@ -1,0 +1,5 @@
+*
+!dist/**/*
+!src/assets/**/*
+!LINCENSE
+README.md

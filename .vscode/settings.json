@@ -1,0 +1,16 @@
+{
+  "prettier.enable": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+  },
+  "cSpell.words": [
+    "gitart",
+    "stackable",
+    "vite",
+    "stylelint",
+    "unplugin",
+    "windicss",
+    "vitejs"
+  ],
+}
