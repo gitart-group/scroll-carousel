@@ -27,15 +27,18 @@ export default defineComponent({
     },
 
     // key field name for :key in v-for
+    // (use index by default)
     keyField: {
       type: String,
-      default: 'id',
+      default: null,
     },
 
-    // gap around each item
+    // gap around each item.
+    // value '12' means 'padding: 6px;' for each item.
+    // value '12 20' means 'padding: 6px 10px;' for each item.
     itemGap: {
       type: [String, Number],
-      default: '16',
+      default: '0',
       validator: (value: string | number) => {
         const gaps = value.toString().split(' ')
         return gaps.length <= 2 && gaps.every((gap: string) => !isNaN(parseInt(gap)))
@@ -249,8 +252,8 @@ export default defineComponent({
       >
         <div class="gsc-content__track-inner">
           <div
-            v-for="item in items"
-            :key="item[keyField]"
+            v-for="(item, index) in items"
+            :key="keyField ? item[keyField] : index"
             class="gsc-content__slide"
             :style="slideStyle"
           >
