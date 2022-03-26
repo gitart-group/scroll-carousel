@@ -1,7 +1,7 @@
 <template>
-  <AComponent>
-    <!--  -->
-  </AComponent>
+  <div>
+    <!-- <GScrollCarousel></GScrollCarousel> -->
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -4,7 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AComponent: typeof import('component-path')['AComponent']
+    GScrollCarousel: typeof import('gitart-scroll-carousel')['GScrollCarousel']
   }
 }
 

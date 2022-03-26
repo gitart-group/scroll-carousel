@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "component-path": ["../src/index.ts"]
+      "gitart-scroll-carousel": ["../src/index.ts"]
     }
   },
   "exclude": []

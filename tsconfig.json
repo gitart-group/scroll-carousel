@@ -28,7 +28,7 @@
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "component-path": ["./src/index.ts"]
+      "gitart-scroll-carousel": ["./src/index.ts"]
     }
   },
   "exclude": [
