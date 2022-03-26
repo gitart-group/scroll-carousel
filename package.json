@@ -22,7 +22,18 @@
     "./package.json": "./package.json"
   },
   "types": "dist/index.d.ts",
-  "keywords": [],
+  "keywords": [
+    "gitart carousel",
+    "gitart-scroll-carousel",
+    "carousel",
+    "slider",
+    "carousel component",
+    "slider component",
+    "vue slider",
+    "vue3 slider",
+    "vue carousel",
+    "vue3 carousel"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/gitart-group/scroll-carousel.git",
