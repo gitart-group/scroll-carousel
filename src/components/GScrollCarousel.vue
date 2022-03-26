@@ -178,10 +178,11 @@ export default defineComponent({
 
     const onTrackScroll = () => {
       const scrollLeft = trackRef.value!.scrollLeft
-      if (scrollLeft === 0)
+
+      if (scrollLeft < 2)
         onEdge.value = 'left'
 
-      else if (scrollLeft + trackRef.value!.offsetWidth === trackRef.value!.scrollWidth)
+      else if (Math.abs((scrollLeft + trackRef.value!.offsetWidth) - trackRef.value!.scrollWidth) < 2)
         onEdge.value = 'right'
 
       else
