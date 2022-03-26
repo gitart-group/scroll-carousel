@@ -62,6 +62,26 @@ export default defineComponent({
       type: String,
       default: 'gsc-arrow-transition',
     },
+
+    /**
+     * Slide min-width on app startup when html is displayed,
+     * but js is not loaded yet.
+     * It correct's the slide width in SSR mode.
+     */
+    ssrSlideMinWidth: {
+      type: [Number, String],
+      default: null,
+    },
+
+    /**
+     * Slide max-width on app startup when html is displayed,
+     * but js is not loaded yet.
+     * It correct's the slide width in SSR mode.
+     */
+    ssrSlideMaxWidth: {
+      type: [Number, String],
+      default: null,
+    },
   },
   setup(props) {
     const initialized = ref(false)
@@ -211,6 +231,8 @@ export default defineComponent({
       return Object.entries({
         '--gsc-slide-gap-y': itemGap.value.y,
         '--gsc-slide-gap-x': itemGap.value.x,
+        '--gsc-slide-ssr-min-width': props.ssrSlideMinWidth ? `${parseInt(props.ssrSlideMinWidth.toString())}px` : '',
+        '--gsc-slide-ssr-max-width': props.ssrSlideMaxWidth ? `${parseInt(props.ssrSlideMaxWidth.toString())}px` : '',
       }).reduce((acc, [key, value]) => {
         return `${acc}${key}: ${value};`
       }, '')
@@ -243,6 +265,7 @@ export default defineComponent({
       class="gsc-content"
       :class="{
         'gsc-content--scrolling': indicatorOptions.isScrolling,
+        'gsc-content--initialized': initialized,
       }"
     >
       <div
@@ -365,6 +388,13 @@ export default defineComponent({
 
   &__indicator {
     margin-top: 12px;
+  }
+
+  &:not(.gsc-content--initialized) {
+    .gsc-content__slide {
+      min-width: var(--gsc-slide-ssr-min-width) !important;
+      max-width: var(--gsc-slide-ssr-max-width) !important;
+    }
   }
 }
 
