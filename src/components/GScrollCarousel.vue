@@ -20,22 +20,22 @@ export default defineComponent({
       required: true,
     },
 
-    // how much items in the view
+    // How much items in the view
     itemsToShow: {
       type: Number,
       required: true,
     },
 
-    // key field name for :key in v-for
-    // (use index by default)
+    // Key field name for :key in v-for
+    // (using index by default)
     keyField: {
       type: String,
       default: null,
     },
 
-    // gap around each item.
-    // value '12' means 'padding: 6px;' for each item.
-    // value '12 20' means 'padding: 6px 10px;' for each item.
+    // Gap around each item.
+    // Value '12' means 'padding: 6px;' for each item.
+    // Value '12 20' means 'padding: 6px 10px;' for each item.
     itemGap: {
       type: [String, Number],
       default: '0',
@@ -45,20 +45,20 @@ export default defineComponent({
       },
     },
 
-    // visible part of next item in carousel
+    // The visible part of the next element in the carousel
     previewSize: {
       type: Number,
       default: 120,
     },
 
-    // if false, arrow will not be shown
+    // Determines whether arrows should be visible
     showArrows: {
       type: Boolean,
       default: true,
     },
 
-    // transition name for arrow
-    arrowTransition: {
+    // Transition name for disapearing arrows
+    arrowsTransition: {
       type: String,
       default: 'gsc-arrow-transition',
     },
@@ -296,7 +296,7 @@ export default defineComponent({
         :active="onEdge !== 'left'"
         :move="() => onMove(-1)"
       >
-        <Transition :name="arrowTransition">
+        <Transition :name="arrowsTransition">
           <GScrollCarouselArrow
             v-if="onEdge !== 'left'"
             side="left"
@@ -313,7 +313,7 @@ export default defineComponent({
         :active="onEdge !== 'right'"
         :move="() => onMove(1)"
       >
-        <Transition :name="arrowTransition">
+        <Transition :name="arrowsTransition">
           <GScrollCarouselArrow
             v-if="onEdge !== 'right'"
             side="right"
