@@ -257,7 +257,11 @@ export default defineComponent({
             class="gsc-content__slide"
             :style="slideStyle"
           >
-            <slot name="slide" :data="item" />
+            <slot
+              name="item"
+              :data="item"
+              :index="index"
+            />
           </div>
         </div>
       </div>
