@@ -339,7 +339,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .gsc {
-  --gsc-arrow-color: var(--gsc-custom-arrow-color, #000);
+  --gsc-arrow-bg: var(--gsc-custom-arrow-bg, #000);
+  --gsc-arrow-bg-hover: var(--gsc-custom-arrow-bg-hover, rgb(34, 34, 34));
+  --gsc-arrow-color: var(--gsc-custom-arrow-color, #fff);
   --gsc-indicator-bar-color: var(--gsc-custom-indicator-bar-color, #212121);
   --gsc-indicator-track-color: var(--gsc-custom-indicator-track-color, #e0e0e0);
 }

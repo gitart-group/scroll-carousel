@@ -23,17 +23,21 @@ export default defineComponent({
 .gsc-arrow {
   width: 48px;
   height: 48px;
-  border: 1px solid #000;
   border-radius: 50%;
-  background: var(--gsc-arrow-color);
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  background: var(--gsc-arrow-bg);
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--gsc-arrow-bg-hover);
+  }
 
   span {
-    order: solid black;
+    position: relative;
+    z-index: 2;
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 5px;
