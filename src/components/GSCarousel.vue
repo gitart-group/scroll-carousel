@@ -57,7 +57,7 @@ export default defineComponent({
       default: true,
     },
 
-    // Transition name for disapearing arrows
+    // Transition name for disappearing arrows
     arrowsTransition: {
       type: String,
       default: 'gsc-arrow-transition',
