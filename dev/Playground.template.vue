@@ -31,7 +31,7 @@ const itemsToShow = computed(() => {
     </h1>
     <hr class="mb-6">
 
-    <GScrollCarousel
+    <GSCarousel
       :items="items"
       item-gap="16 10"
       :items-to-show="itemsToShow"
@@ -49,11 +49,11 @@ const itemsToShow = computed(() => {
           </div>
         </div>
       </template>
-    </GScrollCarousel>
+    </GSCarousel>
 
     <hr class="my-8">
 
-    <GScrollCarousel
+    <GSCarousel
       :items="items"
       :items-to-show="2"
     >
@@ -80,7 +80,7 @@ const itemsToShow = computed(() => {
           </div>
         </transition>
       </template>
-    </GScrollCarousel>
+    </GSCarousel>
   </div>
 </template>
 

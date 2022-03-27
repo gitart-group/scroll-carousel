@@ -33,7 +33,7 @@ export default defineConfig({
       resolvers: [
         (name: string) => {
           if ([
-            'GScrollCarousel',
+            'GSCarousel',
           ].includes(name))
             return { importName: name, path: 'gitart-scroll-carousel' }
 
