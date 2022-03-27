@@ -4,14 +4,14 @@ import { computed, defineComponent, nextTick, onMounted, reactive, ref } from 'v
 
 import { useAnimateNumber } from '../composables/useAnimateNumber'
 
-import GScrollCarouselArrow from './GScrollCarouselArrow.vue'
-import GScrollCarouselIndicator from './GScrollCarouselIndicator.vue'
+import GSArrow from './GSArrow.vue'
+import GSIndicator from './GSIndicator.vue'
 
 export default defineComponent({
-  name: 'GScrollCarousel',
+  name: 'GSCarousel',
   components: {
-    GScrollCarouselArrow,
-    GScrollCarouselIndicator,
+    GSArrow,
+    GSIndicator,
   },
 
   props: {
@@ -298,7 +298,7 @@ export default defineComponent({
         :move="() => onMove(-1)"
       >
         <Transition :name="arrowsTransition">
-          <GScrollCarouselArrow
+          <GSArrow
             v-if="onEdge !== 'left'"
             side="left"
             class="gsc-content__arrow gsc-content__arrow--left"
@@ -315,7 +315,7 @@ export default defineComponent({
         :move="() => onMove(1)"
       >
         <Transition :name="arrowsTransition">
-          <GScrollCarouselArrow
+          <GSArrow
             v-if="onEdge !== 'right'"
             side="right"
             class="gsc-content__arrow gsc-content__arrow--right"
@@ -325,7 +325,7 @@ export default defineComponent({
       </slot>
     </div>
 
-    <GScrollCarouselIndicator
+    <GSIndicator
       class="gsc-content__indicator"
       :bar-offset-percent="indicatorOptions.barOffsetPercent"
       :bar-width-percent="indicatorOptions.barWidthPercent"

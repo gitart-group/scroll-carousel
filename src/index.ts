@@ -1,4 +1,4 @@
 import './scss/main.scss'
 
 // standalone component
-export { default as GScrollCarousel } from './components/GScrollCarousel.vue'
+export { default as GSCarousel } from './components/GSCarousel.vue'

@@ -2,7 +2,7 @@
 import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'GScrollCarouselIndicator',
+  name: 'GSIndicator',
   props: {
     barWidthPercent: {
       type: Number,
