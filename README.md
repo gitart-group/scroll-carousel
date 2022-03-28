@@ -23,11 +23,11 @@ npm install gitart-scroll-carousel
 ```vue
 <script>
 import 'gitart-vue-dialog/dist/style.css'
-import { GCarousel } from 'gitart-scroll-carousel';
+import { GSCarousel } from 'gitart-scroll-carousel';
 
 export default {
   components: {
-    GCarousel,
+    GSCarousel,
   },
   data: () => ({
     items: [0,1,2,3,4]
