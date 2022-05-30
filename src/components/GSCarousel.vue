@@ -138,40 +138,28 @@ export default defineComponent({
     const onMove = (move: number) => {
       const scrollLeft = trackRef.value!.scrollLeft
 
-      // offset to the left or right edge of the visible view of the carousel
-      const offsetToLeft = (scrollLeft + (itemGap.value.x / 2))
-      const offsetToRight = (scrollLeft - (itemGap.value.x / 2) + width.value)
-
-      // how much pixels of the next and prev slide we see
-      const prevSlideInView = slideWidth.value - (offsetToLeft % slideWidth.value)
-      const nextSlideInView = offsetToRight % slideWidth.value
-
-      const prevSlideIndex = Math.floor(offsetToLeft / slideWidth.value)
+      let currentSlide = Math.floor(scrollLeft / slideWidth.value)
+      if (currentSlide * slideWidth.value < scrollLeft)
+        currentSlide += 1
 
       if (move === 1) {
-        let slide: number = prevSlideIndex + move * props.itemsToShow
-        if (slideWidth.value - nextSlideInView < itemGap.value.x)
-          slide += 1
+        let slideToScroll = currentSlide + props.itemsToShow
 
         const maxSlide = props.items.length - props.itemsToShow
-        if (slide > maxSlide)
-          slide = maxSlide
+        if (slideToScroll > maxSlide)
+          slideToScroll = maxSlide
 
-        const newScrollLeft = slideWidth.value * slide
+        const isLastInvisible = ((currentSlide * slideWidth.value) - props.previewSize) > scrollLeft
+        if (isLastInvisible)
+          slideToScroll -= 1
+
+        const newScrollLeft = slideWidth.value * slideToScroll
         setScrollLeft(newScrollLeft)
       }
       else if (move === -1) {
-        let slide: number = prevSlideIndex + move * props.itemsToShow
-        if (slideWidth.value - prevSlideInView < itemGap.value.x)
-          slide -= 1
+        const slideToScroll = currentSlide - props.itemsToShow
 
-        if (slide < 0)
-          slide = 0
-
-        else
-          slide += 1
-
-        const newScrollLeft = (slideWidth.value * slide) - props.previewSize
+        const newScrollLeft = (slideWidth.value * slideToScroll) - props.previewSize
         setScrollLeft(newScrollLeft)
       }
     }
