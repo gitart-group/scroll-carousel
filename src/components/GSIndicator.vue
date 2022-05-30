@@ -23,7 +23,7 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const indicatorRef = ref<HTMLDivElement | null>(null)
+    const indicatorRef = ref<HTMLDivElement | null>()
     const startBarX = ref(0)
     const startBarOffsetPercent = ref(0)
     const isScrolling = ref(false)

@@ -85,7 +85,7 @@ export default defineComponent({
   },
   setup(props) {
     const initialized = ref(false)
-    const trackRef = ref<HTMLElement | null>(null)
+    const trackRef = ref<HTMLElement | null>()
     const onEdge = ref<'left' | 'right' | null>('left')
     const width = ref(0)
 
