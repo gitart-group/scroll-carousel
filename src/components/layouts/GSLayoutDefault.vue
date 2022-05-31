@@ -18,6 +18,15 @@ export default defineComponent({
       type: String as PropType<'left' | 'right' | 'none'>,
       required: true,
     },
+
+    /**
+     * layout specific props
+     */
+
+    disableArrows: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
@@ -27,23 +36,25 @@ export default defineComponent({
     <div class="gsl-default">
       <slot name="track" />
 
-      <Transition name="gsc-arrow-transition">
-        <GSArrow
-          v-if="disabledSide !== 'left'"
-          side="left"
-          class="gsl-default__arrow gsl-default__arrow--left"
-          @click="onMove(-1)"
-        />
-      </Transition>
+      <template v-if="!disableArrows">
+        <Transition name="gsc-arrow-transition">
+          <GSArrow
+            v-if="disabledSide !== 'left'"
+            side="left"
+            class="gsl-default__arrow gsl-default__arrow--left"
+            @click="onMove(-1)"
+          />
+        </Transition>
 
-      <Transition name="gsc-arrow-transition">
-        <GSArrow
-          v-if="disabledSide !== 'right'"
-          side="right"
-          class="gsl-default__arrow gsl-default__arrow--right"
-          @click="onMove(1)"
-        />
-      </Transition>
+        <Transition name="gsc-arrow-transition">
+          <GSArrow
+            v-if="disabledSide !== 'right'"
+            side="right"
+            class="gsl-default__arrow gsl-default__arrow--right"
+            @click="onMove(1)"
+          />
+        </Transition>
+      </template>
     </div>
 
     <div class="gsl-default__indicator">

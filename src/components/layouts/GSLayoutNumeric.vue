@@ -26,6 +26,15 @@ export default defineComponent({
       type: Array as PropType<any[]>,
       required: true,
     },
+
+    /**
+     * layout specific props
+     */
+
+    disableControls: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
@@ -40,7 +49,10 @@ export default defineComponent({
       <slot name="indicator" />
     </div>
 
-    <div class="gsl-numeric__contorls">
+    <div
+      v-if="!disableControls"
+      class="gsl-numeric__contorls"
+    >
       <GSArrow
         :disabled="disabledSide === 'left'"
         side="left"
