@@ -28,6 +28,7 @@ specifiers:
   windicss: ^3.4.0
 
 dependencies:
+  '@vueuse/core': 8.2.0_vue@3.2.36
   bezier-easing: 2.1.0
   gitart-animate-number: 0.1.0
 
@@ -38,7 +39,6 @@ devDependencies:
   '@vue/compiler-sfc': 3.2.31
   '@vue/runtime-core': 3.2.31
   '@vue/test-utils': 2.0.0-rc.18_vue@3.2.36
-  '@vueuse/core': 8.2.0_vue@3.2.36
   eslint: 8.16.0
   happy-dom: 2.50.0
   sass: 1.49.9
@@ -857,11 +857,11 @@ packages:
       '@vueuse/shared': 8.2.0_vue@3.2.36
       vue: 3.2.36
       vue-demi: 0.12.4_vue@3.2.36
-    dev: true
+    dev: false
 
   /@vueuse/metadata/8.2.0:
     resolution: {integrity: sha512-cbaezEccNuxQC+OiudG9VjZNg9/RbAAHkyuhC6+8Gsgsc+MvDhfn1NrV6NNTaldLlZgJFgUiYOkrf3JGTTTGXQ==}
-    dev: true
+    dev: false
 
   /@vueuse/shared/8.2.0_vue@3.2.36:
     resolution: {integrity: sha512-dTw7EJZgZCgG9DoVAiz4LtmKnIFXuE/idUFzvqRAJLjbPiVJc+qQH5kDUdKHI3W1U9t//1mdasQEKONArburiQ==}
@@ -876,7 +876,7 @@ packages:
     dependencies:
       vue: 3.2.36
       vue-demi: 0.12.4_vue@3.2.36
-    dev: true
+    dev: false
 
   /@windicss/config/1.8.4:
     resolution: {integrity: sha512-i4fFGFfZoRess6WMkauykHC3PFd9xKYVx7lSuLfMK7sgo6x3+l4dY42GbsWMHyLqH1sTMfyt1LgfXSIKYJozSA==}
@@ -4287,7 +4287,7 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.36
-    dev: true
+    dev: false
 
   /vue-eslint-parser/9.0.2_eslint@8.16.0:
     resolution: {integrity: sha512-uCPQwTGjOtAYrwnU+76pYxalhjsh7iFBsHwBqDHiOPTxtICDaraO4Szw54WFTNZTAEsgHHzqFOu1mmnBOBRzDA==}

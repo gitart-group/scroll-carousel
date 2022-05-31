@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { ComponentPublicInstance, PropType, ShallowUnwrapRef } from 'vue'
 import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { useDebounceFn, useThrottleFn } from '@vueuse/core'
 
 import { useAnimateNumber } from '../composables/useAnimateNumber'
 
@@ -54,6 +55,12 @@ export default defineComponent({
       default: true,
     },
 
+    // Enables sticking to the sides of the carousel
+    sticky: {
+      type: Boolean,
+      default: false,
+    },
+
     // layout component
     layout: {
       type: Object as PropType<ComponentPublicInstance | ShallowUnwrapRef<ComponentPublicInstance>>,
@@ -100,6 +107,7 @@ export default defineComponent({
       barWidthPercent: 0,
     })
 
+    // TODO check or delete this
     let scrollListenerTimerId: ReturnType<typeof setTimeout>
 
     const {
@@ -125,6 +133,7 @@ export default defineComponent({
 
     const setScrollLeft = (newScrollLeft: number, smooth = true) => {
       // Clear timer. It would break the carousel if the timer is waiting to be executed.
+      // TODO check or delete this
       clearTimeout(scrollListenerTimerId)
 
       if (smooth) {
@@ -167,7 +176,6 @@ export default defineComponent({
         if (isLastInvisible)
           itemToScroll -= 1
 
-        currentItem.value = itemToScroll
         const newScrollLeft = itemWidth.value * itemToScroll
         setScrollLeft(newScrollLeft)
       }
@@ -179,11 +187,35 @@ export default defineComponent({
         if (itemToScroll < 0)
           itemToScroll = 0
 
-        currentItem.value = itemToScroll
         const newScrollLeft = (itemWidth.value * itemToScroll) - props.previewSize
         setScrollLeft(newScrollLeft)
       }
     }
+
+    const onFinishScrollingThrottled = useThrottleFn(() => {
+      currentItem.value = getCurrentItem()
+    }, 300)
+
+    let prevScrollLeft = 0
+    const onFinishScrollingDebounced = useDebounceFn((scrollLeft: number) => {
+      setImmediately(scrollLeft)
+
+      if (!props.sticky || indicatorOptions.isScrolling)
+        return
+
+      // move to right on any move
+      if (prevScrollLeft < scrollLeft) {
+        const newScrollLeft = (itemWidth.value * currentItem.value)
+        setScrollLeft(newScrollLeft)
+      }
+      // move to left if the carousel is scrolled more than previewSize
+      else if (Math.abs((itemWidth.value * currentItem.value) - scrollLeft) > props.previewSize) {
+        const newScrollLeft = (itemWidth.value * (currentItem.value - 1)) - props.previewSize
+        setScrollLeft(newScrollLeft)
+      }
+
+      prevScrollLeft = scrollLeft
+    }, 300)
 
     const onTrackScroll = () => {
       const scrollLeft = trackRef.value!.scrollLeft
@@ -199,13 +231,8 @@ export default defineComponent({
 
       indicatorOptions.barOffsetPercent = (scrollLeft / trackRef.value!.scrollWidth) * 100
 
-      // TODO solve this
-      // currentItem.value = getCurrentItem()
-
-      clearTimeout(scrollListenerTimerId)
-      scrollListenerTimerId = setTimeout(() => {
-        setImmediately(scrollLeft)
-      }, 100)
+      onFinishScrollingThrottled()
+      onFinishScrollingDebounced(scrollLeft)
     }
 
     const onIndicatorScroll = ({ barOffsetPercent }: { barOffsetPercent: number }, smooth = false) => {

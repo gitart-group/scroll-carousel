@@ -1,6 +1,6 @@
 {
   "name": "gitart-scroll-carousel",
-  "version": "0.1.1",
+  "version": "0.1.7",
   "scripts": {
     "dev": "vite --config dev/vite.config.ts",
     "dev:build": "vite build --config dev/vite.config.ts",
@@ -45,7 +45,6 @@
     "@vue/compiler-sfc": "^3.2.26",
     "@vue/runtime-core": "^3.2.26",
     "@vue/test-utils": "^2.0.0-rc.18",
-    "@vueuse/core": "^8.2.0",
     "eslint": "^8.16.0",
     "happy-dom": "^2.25.1",
     "sass": "^1.45.1",
@@ -67,6 +66,7 @@
     "vue": "^3.2.6"
   },
   "dependencies": {
+    "@vueuse/core": "^8.2.0",
     "bezier-easing": "^2.1.0",
     "gitart-animate-number": "^0.1.0"
   }
