@@ -57,6 +57,7 @@ export default defineConfig({
   resolve: {
     alias: {
       'gitart-scroll-carousel': resolve('../src/index.ts'),
+      'gitart-scroll-carousel/': resolve('../src/'),
     },
   },
 

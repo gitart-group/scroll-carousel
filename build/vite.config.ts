@@ -4,6 +4,12 @@ import vue from '@vitejs/plugin-vue'
 
 const resolve = (str: string) => path.resolve(__dirname, '../', str)
 
+const chunks = [
+  'GSArrow',
+  'GSLayoutNumeric',
+  'GSLayoutDefault',
+]
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -18,24 +24,20 @@ export default defineConfig({
 
     lib: {
       entry: resolve('src/index.ts'),
+      formats: ['es'],
       name: 'index',
-      fileName: (format) => {
-        let fileEnd = 'js'
-
-        if (format === 'es')
-          fileEnd = 'mjs'
-
-        else if (format === 'umd')
-          fileEnd = 'cjs'
-
-        return `index.${fileEnd}`
-      },
+      fileName: format => format === 'es' ? 'index.mjs' : `index.${format}.js`,
     },
 
+    cssCodeSplit: true,
     rollupOptions: {
       external: ['vue'],
       output: {
         exports: 'named',
+        manualChunks(id) {
+          const chunk = chunks.find(c => id.includes(c))
+          return chunk || null
+        },
         globals: {
           vue: 'Vue',
         },

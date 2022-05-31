@@ -127,7 +127,6 @@ export default defineComponent({
 .gsc-indicator {
   --indicator-height: 26px;
 
-  margin-top: 2px;
   height: var(--indicator-height);
   display: flex;
   align-items: center;

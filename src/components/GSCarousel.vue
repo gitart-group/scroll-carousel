@@ -4,16 +4,13 @@ import { computed, defineComponent, nextTick, onMounted, reactive, ref } from 'v
 
 import { useAnimateNumber } from '../composables/useAnimateNumber'
 
-import GSArrow from './GSArrow.vue'
 import GSIndicator from './GSIndicator.vue'
 
 export default defineComponent({
   name: 'GSCarousel',
   components: {
-    GSArrow,
     GSIndicator,
   },
-
   props: {
     items: {
       type: Array as PropType<any[]>,
@@ -57,28 +54,30 @@ export default defineComponent({
       default: true,
     },
 
-    // Transition name for disappearing arrows
-    arrowsTransition: {
-      type: String,
-      default: 'gsc-arrow-transition',
+    layout: {
+      type: Object as PropType<{
+        compoment: Object
+        props?: Object
+      }>,
+      required: true,
     },
 
     /**
-     * Slide min-width on app startup when html is displayed,
+     * Item min-width on app startup when html is displayed,
      * but js is not loaded yet.
-     * It correct's the slide width in SSR mode.
+     * It correct's the item width in SSR mode.
      */
-    ssrSlideMinWidth: {
+    ssrItemMinWidth: {
       type: [Number, String],
       default: null,
     },
 
     /**
-     * Slide max-width on app startup when html is displayed,
+     * Item max-width on app startup when html is displayed,
      * but js is not loaded yet.
-     * It correct's the slide width in SSR mode.
+     * It correct's the item width in SSR mode.
      */
-    ssrSlideMaxWidth: {
+    ssrItemMaxWidth: {
       type: [Number, String],
       default: null,
     },
@@ -86,8 +85,9 @@ export default defineComponent({
   setup(props) {
     const initialized = ref(false)
     const trackRef = ref<HTMLElement | null>()
-    const onEdge = ref<'left' | 'right' | null>('left')
+    const disabledSide = ref<'left' | 'right' | 'none'>('left')
     const width = ref(0)
+    const currentItem = ref(0)
 
     const indicatorOptions = reactive({
       isScrolling: false,
@@ -114,7 +114,7 @@ export default defineComponent({
       return { y, x }
     })
 
-    const slideWidth = computed(() => {
+    const itemWidth = computed(() => {
       return (width.value - props.previewSize) / props.itemsToShow
     })
 
@@ -131,35 +131,51 @@ export default defineComponent({
       }
     }
 
+    const getCurrentItem = () => {
+      const scrollLeft = trackRef.value!.scrollLeft
+
+      let item = Math.floor(scrollLeft / itemWidth.value)
+
+      // The item shouldn't be scrolled out
+      if (item * itemWidth.value < scrollLeft)
+        item += 1
+
+      return item
+    }
+
     /**
      * Event handlers
      */
 
     const onMove = (move: number) => {
       const scrollLeft = trackRef.value!.scrollLeft
-
-      let currentSlide = Math.floor(scrollLeft / slideWidth.value)
-      if (currentSlide * slideWidth.value < scrollLeft)
-        currentSlide += 1
+      const item = getCurrentItem()
 
       if (move === 1) {
-        let slideToScroll = currentSlide + props.itemsToShow
+        let itemToScroll = item + props.itemsToShow
 
-        const maxSlide = props.items.length - props.itemsToShow
-        if (slideToScroll > maxSlide)
-          slideToScroll = maxSlide
+        const maxItem = props.items.length - props.itemsToShow
+        if (itemToScroll > maxItem)
+          itemToScroll = maxItem
 
-        const isLastInvisible = ((currentSlide * slideWidth.value) - props.previewSize) > scrollLeft
+        const isLastInvisible = ((item * itemWidth.value) - props.previewSize) > scrollLeft
         if (isLastInvisible)
-          slideToScroll -= 1
+          itemToScroll -= 1
 
-        const newScrollLeft = slideWidth.value * slideToScroll
+        currentItem.value = itemToScroll
+        const newScrollLeft = itemWidth.value * itemToScroll
         setScrollLeft(newScrollLeft)
       }
       else if (move === -1) {
-        const slideToScroll = currentSlide - props.itemsToShow
+        if (item === 0)
+          return
 
-        const newScrollLeft = (slideWidth.value * slideToScroll) - props.previewSize
+        let itemToScroll = item - props.itemsToShow
+        if (itemToScroll < 0)
+          itemToScroll = 0
+
+        currentItem.value = itemToScroll
+        const newScrollLeft = (itemWidth.value * itemToScroll) - props.previewSize
         setScrollLeft(newScrollLeft)
       }
     }
@@ -168,15 +184,18 @@ export default defineComponent({
       const scrollLeft = trackRef.value!.scrollLeft
 
       if (scrollLeft < 2)
-        onEdge.value = 'left'
+        disabledSide.value = 'left'
 
       else if (Math.abs((scrollLeft + trackRef.value!.offsetWidth) - trackRef.value!.scrollWidth) < 2)
-        onEdge.value = 'right'
+        disabledSide.value = 'right'
 
       else
-        onEdge.value = null
+        disabledSide.value = 'none'
 
       indicatorOptions.barOffsetPercent = (scrollLeft / trackRef.value!.scrollWidth) * 100
+
+      // TODO solve this
+      // currentItem.value = getCurrentItem()
 
       clearTimeout(scrollListenerTimerId)
       scrollListenerTimerId = setTimeout(() => {
@@ -218,16 +237,16 @@ export default defineComponent({
 
     const styles = computed(() => {
       return Object.entries({
-        '--gsc-slide-gap-y': itemGap.value.y,
-        '--gsc-slide-gap-x': itemGap.value.x,
-        '--gsc-slide-ssr-min-width': props.ssrSlideMinWidth ? `${parseInt(props.ssrSlideMinWidth.toString())}px` : '',
-        '--gsc-slide-ssr-max-width': props.ssrSlideMaxWidth ? `${parseInt(props.ssrSlideMaxWidth.toString())}px` : '',
+        '--gsc-item-gap-y': itemGap.value.y,
+        '--gsc-item-gap-x': itemGap.value.x,
+        '--gsc-item-ssr-min-width': props.ssrItemMinWidth ? `${parseInt(props.ssrItemMinWidth.toString())}px` : '',
+        '--gsc-item-ssr-max-width': props.ssrItemMaxWidth ? `${parseInt(props.ssrItemMaxWidth.toString())}px` : '',
       }).reduce((acc, [key, value]) => {
         return `${acc}${key}: ${value};`
       }, '')
     })
 
-    const slideStyle = computed(() => ({
+    const itemStyle = computed(() => ({
       width: `calc((100% - ${props.previewSize}px) / ${props.itemsToShow})`,
     }))
 
@@ -235,10 +254,11 @@ export default defineComponent({
       trackRef,
 
       styles,
-      slideStyle,
+      itemStyle,
       initialized,
-      onEdge,
+      disabledSide,
       indicatorOptions,
+      currentItem,
       onMove,
       onTrackScroll,
       onIndicatorScroll,
@@ -249,155 +269,98 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="gsc" :style="styles">
-    <div
-      class="gsc-content"
-      :class="{
-        'gsc-content--scrolling': indicatorOptions.isScrolling,
-        'gsc-content--initialized': initialized,
-      }"
+  <div
+    class="gsc"
+    :class="{
+      'gsc--scrolling': indicatorOptions.isScrolling,
+      'gsc--initialized': initialized,
+    }"
+    :style="styles"
+  >
+    <Component
+      :is="layout.compoment"
+      :on-move="onMove"
+      :disabled-side="disabledSide"
+      :current-item="currentItem"
+      :items="items"
+      :initialized="initialized"
+      :v-bind="layout.props"
     >
-      <div
-        ref="trackRef"
-        class="gsc-content__track"
-        @scroll.passive="onTrackScroll"
-      >
-        <div class="gsc-content__track-inner">
-          <div
-            v-for="(item, index) in items"
-            :key="keyField ? item[keyField] : index"
-            class="gsc-content__slide"
-            :style="slideStyle"
-          >
-            <slot
-              name="item"
-              :data="item"
-              :index="index"
-            />
+      <template #track>
+        <div
+          ref="trackRef"
+          class="gsc-track"
+          @scroll.passive="onTrackScroll"
+        >
+          <div class="gsc-track__inner">
+            <div
+              v-for="(item, index) in items"
+              :key="keyField ? item[keyField] : index"
+              class="gsc-track__item"
+              :style="itemStyle"
+            >
+              <slot
+                name="item"
+                :data="item"
+                :index="index"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </template>
 
-      <slot
-        v-if="initialized && showArrows"
-        name="arrow"
-        :side="'left' as ('left' | 'right')"
-        :active="onEdge !== 'left'"
-        :move="() => onMove(-1)"
-      >
-        <Transition :name="arrowsTransition">
-          <GSArrow
-            v-if="onEdge !== 'left'"
-            side="left"
-            class="gsc-content__arrow gsc-content__arrow--left"
-            @click="onMove(-1)"
-          />
-        </Transition>
-      </slot>
-
-      <slot
-        v-if="initialized && showArrows"
-        name="arrow"
-        :side="'right' as ('left' | 'right')"
-        :active="onEdge !== 'right'"
-        :move="() => onMove(1)"
-      >
-        <Transition :name="arrowsTransition">
-          <GSArrow
-            v-if="onEdge !== 'right'"
-            side="right"
-            class="gsc-content__arrow gsc-content__arrow--right"
-            @click="onMove(1)"
-          />
-        </Transition>
-      </slot>
-    </div>
-
-    <GSIndicator
-      class="gsc-content__indicator"
-      :bar-offset-percent="indicatorOptions.barOffsetPercent"
-      :bar-width-percent="indicatorOptions.barWidthPercent"
-      @smooth-scroll="onIndicatorScroll($event, true)"
-      @scroll="onIndicatorScroll"
-      @scroll:start="onSetIndicatorScrollStatus(true)"
-      @scroll:end="onSetIndicatorScrollStatus(false)"
-    />
+      <template #indicator>
+        <GSIndicator
+          :bar-offset-percent="indicatorOptions.barOffsetPercent"
+          :bar-width-percent="indicatorOptions.barWidthPercent"
+          @smooth-scroll="onIndicatorScroll($event, true)"
+          @scroll="onIndicatorScroll"
+          @scroll:start="onSetIndicatorScrollStatus(true)"
+          @scroll:end="onSetIndicatorScrollStatus(false)"
+        />
+      </template>
+    </Component>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .gsc {
   --gsc-arrow-bg: var(--gsc-custom-arrow-bg, #000);
-  --gsc-arrow-bg-hover: var(--gsc-custom-arrow-bg-hover, rgb(34, 34, 34));
+  --gsc-arrow-bg-hover: var(--gsc-custom-arrow-bg-hover, #222);
+  --gsc-arrow-bg-disabled: var(--gsc-custom-arrow-bg-disabled, #d3d3d3);
   --gsc-arrow-color: var(--gsc-custom-arrow-color, #fff);
   --gsc-indicator-bar-color: var(--gsc-custom-indicator-bar-color, #212121);
   --gsc-indicator-track-color: var(--gsc-custom-indicator-track-color, #e0e0e0);
-}
-
-.gsc-content {
-  margin-left: calc(var(--gsc-slide-gap-x) * -1px);
-  margin-right: calc(var(--gsc-slide-gap-x) * -1px);
-  position: relative;
 
   &--scrolling {
     user-select: none;
   }
 
-  &__track {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  &__track-inner {
-    display: flex;
-  }
-
-  &__slide {
-    padding: calc(var(--gsc-slide-gap-y) * 1px) calc(var(--gsc-slide-gap-x) * 1px);
-    flex-shrink: 0;
-  }
-
-  &__arrow {
-    top: 50%;
-    position: absolute;
-    transform: translate(0, -50%);
-
-    &--left {
-      left: calc((var(--gsc-slide-gap-x) * -1px));
-    }
-
-    &--right {
-      right: calc((var(--gsc-slide-gap-x) * -1px));
-    }
-  }
-
-  &__indicator {
-    margin-top: 12px;
-  }
-
-  &:not(.gsc-content--initialized) {
-    .gsc-content__slide {
-      min-width: var(--gsc-slide-ssr-min-width) !important;
-      max-width: var(--gsc-slide-ssr-max-width) !important;
+  &:not(.gsc--initialized) {
+    .gsc-track__item {
+      min-width: var(--gsc-item-ssr-min-width) !important;
+      max-width: var(--gsc-item-ssr-max-width) !important;
     }
   }
 }
 
-.gsc-arrow-transition {
-  &-enter-active,
-  &-leave-active {
-    transition: opacity 0.15s ease-in;
+.gsc-track {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 
-  &-enter-from,
-  &-leave-to {
-    opacity: 0;
+  &__inner {
+    display: flex;
+  }
+
+  &__item {
+    padding: calc(var(--gsc-item-gap-y) * 1px) calc(var(--gsc-item-gap-x) * 1px);
+    flex-shrink: 0;
   }
 }
 </style>

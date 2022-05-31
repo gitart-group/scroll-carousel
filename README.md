@@ -22,8 +22,10 @@ npm install gitart-scroll-carousel
 
 ```vue
 <script>
-import 'gitart-vue-dialog/dist/style.css'
 import { GSCarousel } from 'gitart-scroll-carousel';
+import 'gitart-scroll-carousel/dist/index.css'
+import 'gitart-scroll-carousel/dist/GSArrow.css'
+import 'gitart-scroll-carousel/dist/GSLayoutNumeric.css'
 
 export default {
   components: {
@@ -76,11 +78,14 @@ Here is a list:
 
 `--gsc-custom-arrow-bg-hover` - background color of the arrow when hovered
 
+`--gsc-custom-arrow-bg-disabled` - background color of the arrow when disabled (NumericLayout)
+
 `--gsc-custom-arrow-color` - color of the arrow
 
 `--gsc-custom-indicator-bar-color` - color of the bar below the carousel
 
 `--gsc-custom-indicator-track-color` - color of the track for bar
+
 
 #### Classes
 
@@ -188,27 +193,27 @@ Indicator:
 
 ---
 
-- `ssrSlideMinWidth`
+- `ssrItemMinWidth`
   - **Type:** `Number, String`
 
   - **Default:** `null`
 
   - **Details:** <br/>
-    Slide min-width on app startup when HTML is displayed,
+    Carousel item min-width on app startup when HTML is displayed,
     but js is not loaded yet.
-    It corrects the slide width in SSR mode.
+    It corrects the item width in SSR mode.
 
 ---
 
-- `ssrSlideMaxWidth`
+- `ssrItemMaxWidth`
   - **Type:** `Number, String`
 
   - **Default:** `null`
 
   - **Details:** <br/>
-    Slide max-width on app startup when HTML is displayed,
+    Carousel item max-width on app startup when HTML is displayed,
     but js is not loaded yet.
-    It corrects the slide width in SSR mode.
+    It corrects the item width in SSR mode.
 
 
 ### Slots

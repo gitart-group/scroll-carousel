@@ -9,12 +9,22 @@ export default defineComponent({
       required: true,
       validator: (value: string) => ['left', 'right'].includes(value),
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
 
 <template>
-  <div class="gsc-arrow" :class="`gsc-arrow--side-${side}`">
+  <div
+    class="gsc-arrow"
+    :class="[
+      `gsc-arrow--side-${side}`,
+      { 'gsc-arrow--disabled': disabled },
+    ]"
+  >
     <span />
   </div>
 </template>
@@ -58,6 +68,11 @@ export default defineComponent({
     span {
       transform: rotate(135deg);
     }
+  }
+
+  &--disabled {
+    cursor: unset;
+    background: var(--gsc-arrow-bg-disabled) !important;
   }
 }
 </style>

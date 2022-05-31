@@ -1,26 +1,21 @@
 {
   "name": "gitart-scroll-carousel",
-  "version": "0.0.4",
+  "version": "0.1.1",
   "scripts": {
     "dev": "vite --config dev/vite.config.ts",
     "dev:build": "vite build --config dev/vite.config.ts",
     "build": "node build/build.js",
-    "build:types": "vue-tsc --declaration --emitDeclarationOnly --p ./build/tsconfig.json",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --p ./build/tsconfig.json --outFile dist/index.d.ts",
     "lint": "yarn stylelint && yarn eslint",
     "stylelint": "stylelint src/**/*.vue",
     "eslint": "eslint . --ext .js,.ts,.vue",
     "test": "vitest"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./dist/*": "./dist/*",
-    "./package.json": "./package.json"
-  },
+  "files": [
+    "dist"
+  ],
   "types": "dist/index.d.ts",
   "keywords": [
     "gitart carousel",

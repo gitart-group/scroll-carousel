@@ -27,6 +27,8 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
     "paths": {
       "gitart-scroll-carousel": ["./src/index.ts"]
     }
