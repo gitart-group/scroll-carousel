@@ -216,8 +216,9 @@ export default defineComponent({
      * Life Circles
      */
 
+    let resizeObserver: ResizeObserver | null = null
     onMounted(() => {
-      const resizeObserver = new ResizeObserver(([entry]) => {
+      resizeObserver = new ResizeObserver(([entry]) => {
         window.requestAnimationFrame(() => {
           width.value = entry.contentRect.width
           nextTick(() => {
@@ -229,6 +230,9 @@ export default defineComponent({
       resizeObserver.observe(trackRef.value as HTMLElement)
 
       initialized.value = true
+    })
+    onBeforeUnmount(() => {
+      resizeObserver?.disconnect()
     })
 
     /**
