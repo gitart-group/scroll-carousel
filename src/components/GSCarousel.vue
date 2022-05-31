@@ -1,6 +1,6 @@
 <script lang="ts">
-import type { PropType } from 'vue'
-import { computed, defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
+import type { ComponentPublicInstance, PropType, ShallowUnwrapRef } from 'vue'
+import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
 import { useAnimateNumber } from '../composables/useAnimateNumber'
 
@@ -54,12 +54,17 @@ export default defineComponent({
       default: true,
     },
 
+    // layout component
     layout: {
-      type: Object as PropType<{
-        compoment: Object
-        props?: Object
-      }>,
+      type: Object as PropType<ComponentPublicInstance | ShallowUnwrapRef<ComponentPublicInstance>>,
       required: true,
+    },
+
+    // layout specific props
+    layoutProps: {
+      type: Object as PropType<Object>,
+      required: false,
+      default: null,
     },
 
     /**
@@ -282,13 +287,13 @@ export default defineComponent({
     :style="styles"
   >
     <Component
-      :is="layout.compoment"
+      :is="layout"
       :on-move="onMove"
       :disabled-side="disabledSide"
       :current-item="currentItem"
       :items="items"
       :initialized="initialized"
-      :v-bind="layout.props"
+      v-bind="layoutProps"
     >
       <template #track>
         <div
