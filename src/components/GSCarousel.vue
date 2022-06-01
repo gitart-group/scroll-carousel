@@ -223,7 +223,7 @@ export default defineComponent({
       if (scrollLeft < 2)
         disabledSide.value = 'left'
 
-      else if (Math.abs((scrollLeft + trackRef.value!.offsetWidth) - trackRef.value!.scrollWidth) < 2)
+      else if (trackRef.value!.scrollWidth <= (scrollLeft + trackRef.value!.offsetWidth + 2))
         disabledSide.value = 'right'
 
       else
