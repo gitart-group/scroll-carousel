@@ -148,11 +148,21 @@ export default defineComponent({
     const getCurrentItem = () => {
       const scrollLeft = trackRef.value!.scrollLeft
 
-      let item = Math.floor(scrollLeft / itemWidth.value)
+      const rawDecimal = scrollLeft / itemWidth.value
+      const absence = 1 - (rawDecimal - Math.floor(rawDecimal))
+
+      let item
+      if (absence < 0.09)
+        item = Math.floor(rawDecimal) + 1
+      else
+        item = Math.floor(rawDecimal)
 
       // The item shouldn't be scrolled out
       if (item * itemWidth.value < scrollLeft)
         item += 1
+
+      if (item > props.items.length - 1)
+        item = props.items.length - 1
 
       return item
     }
@@ -209,7 +219,7 @@ export default defineComponent({
         setScrollLeft(newScrollLeft)
       }
       // move to left if the carousel is scrolled more than previewSize
-      else if (Math.abs((itemWidth.value * currentItem.value) - scrollLeft) > props.previewSize) {
+      else if (Math.abs((itemWidth.value * currentItem.value) - scrollLeft) > (props.previewSize + 2)) {
         const newScrollLeft = (itemWidth.value * (currentItem.value - 1)) - props.previewSize
         setScrollLeft(newScrollLeft)
       }
