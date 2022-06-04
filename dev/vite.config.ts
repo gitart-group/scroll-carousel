@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss'
 import Checker from 'vite-plugin-checker'
+import Terminal from 'vite-plugin-terminal'
 
 const resolve = (str: string) => path.resolve(__dirname, str)
 
@@ -14,18 +15,12 @@ export default defineConfig({
   plugins: [
     vue(),
     Checker({
-      vueTsc: true,
+      vueTsc: false,
       overlay: false,
     }),
     AutoImport({
       imports: [
         'vue',
-        // {
-        //   'component-path': [
-        //     'dialogInjectionKey',
-        //     ['plugin', 'dialogPlugin'],
-        //   ],
-        // },
       ],
       dts: resolve('auto-imports.d.ts'),
     }),
@@ -45,6 +40,7 @@ export default defineConfig({
     WindiCSS({
       config: resolve('windi.config.ts'),
     }),
+    Terminal(),
   ],
 
   server: {
