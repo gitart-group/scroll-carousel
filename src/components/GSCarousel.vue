@@ -172,7 +172,7 @@ export default defineComponent({
         if (itemToScroll > maxItem)
           itemToScroll = maxItem
 
-        const isLastInvisible = ((item * itemWidth.value) - props.previewSize) > scrollLeft
+        const isLastInvisible = ((item * itemWidth.value) - props.previewSize - 2) > (scrollLeft)
         if (isLastInvisible)
           itemToScroll -= 1
 
