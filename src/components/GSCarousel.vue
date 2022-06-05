@@ -49,12 +49,6 @@ export default defineComponent({
       default: 120,
     },
 
-    // Determines whether arrows should be visible
-    showArrows: {
-      type: Boolean,
-      default: true,
-    },
-
     // Enables sticking to the sides of the carousel
     sticky: {
       type: Boolean,
