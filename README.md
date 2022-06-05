@@ -8,7 +8,7 @@
 
 📘 [Documentation](https://gitart-scroll-carousel.gitart.org/)
 
-🤯 [Examples](https://gitart-scroll-carousel.gitart.org/examples/)
+🤯 [Demo](https://gitart-scroll-carousel.gitart.org/demo/)
 
 ⭐ [GitHub](https://github.com/gitart-group/scroll-carousel) | Thanks for the stars!
 
@@ -22,7 +22,9 @@
 npm install gitart-scroll-carousel
 ```
 
-#### Example
+## Demo
+
+[Link to demo](https://gitart-scroll-carousel.gitart.org/demo/)
 
 <p align="center"><img src="src/assets/base-example.png" width="100%"></p>
 
