@@ -31,7 +31,12 @@ export default defineComponent({
      * layout specific props
      */
 
-    disableControls: {
+    disableArrows: {
+      type: Boolean,
+      default: false,
+    },
+
+    disableCounter: {
       type: Boolean,
       default: false,
     },
@@ -50,10 +55,11 @@ export default defineComponent({
     </div>
 
     <div
-      v-if="!disableControls"
+      v-if="!(disableArrows && disableCounter)"
       class="gsl-numeric__contorls"
     >
       <GSArrow
+        v-if="!disableArrows"
         :disabled="disabledSide === 'left'"
         side="left"
         class="gsl-numeric__arrow gsl-numeric__arrow--left"
@@ -61,6 +67,7 @@ export default defineComponent({
       />
 
       <div
+        v-if="!disableCounter"
         class="gsl-numeric__contorls-text"
       >
         {{ currentItem + 1 }}
@@ -71,6 +78,7 @@ export default defineComponent({
       </div>
 
       <GSArrow
+        v-if="!disableArrows"
         :disabled="disabledSide === 'right'"
         side="right"
         class="gsl-numeric__arrow gsl-numeric__arrow--right"
@@ -91,10 +99,11 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 30px;
 
     &-text {
       display: flex;
-      padding: 10px 30px;
+      padding: 10px 0px;
       color: #878787;
 
       span {
