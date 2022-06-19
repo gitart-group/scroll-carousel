@@ -172,13 +172,17 @@ export default defineComponent({
       if (move === 1) {
         let itemToScroll = item + props.itemsToShow
 
-        const maxItem = props.items.length - props.itemsToShow
-        if (itemToScroll > maxItem)
-          itemToScroll = maxItem
-
+        // to not scrolled out a partially visible item
+        // we decrement the itemToScroll by 1
+        // (should be before max item check)
         const isLastInvisible = ((item * itemWidth.value) - props.previewSize - 2) > (scrollLeft)
         if (isLastInvisible)
           itemToScroll -= 1
+
+        // Last item to scroll
+        const maxItem = props.items.length - props.itemsToShow
+        if (itemToScroll > maxItem)
+          itemToScroll = maxItem
 
         const newScrollLeft = itemWidth.value * itemToScroll
         setScrollLeft(newScrollLeft)
