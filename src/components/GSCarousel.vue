@@ -200,6 +200,17 @@ export default defineComponent({
       }
     }
 
+    const onMoveTo = (index: number) => {
+      if (index > getCurrentItem()) {
+        const newScrollLeft = itemWidth.value * index
+        setScrollLeft(newScrollLeft)
+        return
+      }
+
+      const newScrollLeft = (itemWidth.value * index) - props.previewSize
+      setScrollLeft(newScrollLeft)
+    }
+
     const onFinishScrollingThrottled = useThrottleFn(() => {
       currentItem.value = getCurrentItem()
     }, 300)
@@ -304,6 +315,7 @@ export default defineComponent({
       indicatorOptions,
       currentItem,
       onMove,
+      onMoveTo,
       onTrackScroll,
       onIndicatorScroll,
       onSetIndicatorScrollStatus,
@@ -324,6 +336,7 @@ export default defineComponent({
     <Component
       :is="layout"
       :on-move="onMove"
+      :on-move-to="onMoveTo"
       :disabled-side="disabledSide"
       :current-item="currentItem"
       :items="items"
