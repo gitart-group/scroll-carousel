@@ -1,6 +1,6 @@
 {
   "name": "gitart-scroll-carousel",
-  "version": "1.1.0",
+  "version": "1.2.0-alpha.3",
   "scripts": {
     "dev": "vite --config dev/vite.config.ts",
     "dev:build": "vite build --config dev/vite.config.ts",
@@ -11,10 +11,20 @@
     "eslint": "eslint . --ext .js,.ts,.vue",
     "test": "vitest"
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bundled": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./dist": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "types": "dist/index.d.ts",
   "keywords": [

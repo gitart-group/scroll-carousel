@@ -24,9 +24,9 @@ export default defineConfig({
 
     lib: {
       entry: resolve('src/index.ts'),
-      formats: ['es'],
+      formats: ['es', 'cjs'],
       name: 'index',
-      fileName: format => format === 'es' ? 'index.mjs' : `index.${format}.js`,
+      fileName: format => format === 'es' ? 'index.mjs' : 'index.cjs',
     },
 
     cssCodeSplit: true,
