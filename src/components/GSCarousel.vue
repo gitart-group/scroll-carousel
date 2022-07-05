@@ -234,7 +234,7 @@ export default defineComponent({
     const onFinishScrollingThrottled = useThrottleFn(() => {
       scopedCurrentItem.value = getCurrentItem()
       emit('update:current-item', scopedCurrentItem.value)
-    }, 300)
+    }, 200)
 
     let prevScrollLeft = 0
     const onFinishScrollingDebounced = useDebounceFn((scrollLeft: number) => {
