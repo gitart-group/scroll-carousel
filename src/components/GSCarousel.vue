@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { ComponentPublicInstance, PropType, ShallowUnwrapRef } from 'vue'
-import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useDebounceFn, useThrottleFn } from '@vueuse/core'
 
 import { useAnimateNumber } from '../composables/useAnimateNumber'
@@ -13,6 +13,11 @@ export default defineComponent({
     GSIndicator,
   },
   props: {
+    currentItem: {
+      type: Number,
+      default: 0,
+    },
+
     items: {
       type: Array as PropType<any[]>,
       required: true,
@@ -88,12 +93,21 @@ export default defineComponent({
       default: null,
     },
   },
-  setup(props) {
+
+  emits: {
+    'update:current-item': (value: number) => true,
+  },
+
+  setup(props, { emit, expose }) {
     const initialized = ref(false)
     const trackRef = ref<HTMLElement | null>()
     const disabledSide = ref<'left' | 'right' | 'none'>('left')
     const width = ref(0)
-    const currentItem = ref(0)
+
+    const scopedCurrentItem = ref(props.currentItem || 0)
+    watch(() => props.currentItem, (val) => {
+      scopedCurrentItem.value = val
+    })
 
     const indicatorOptions = reactive({
       isScrolling: false,
@@ -122,7 +136,7 @@ export default defineComponent({
     })
 
     const itemWidth = computed(() => {
-      return (width.value - props.previewSize) / props.itemsToShow
+      return width.value ? (width.value - props.previewSize) / props.itemsToShow : 0
     })
 
     const setScrollLeft = (newScrollLeft: number, smooth = true) => {
@@ -201,6 +215,14 @@ export default defineComponent({
     }
 
     const onMoveTo = (index: number) => {
+      if (!itemWidth.value) {
+        console.warn('setTimeout run')
+        setTimeout(() => {
+          onMoveTo(index)
+        }, 50)
+        return
+      }
+
       if (index > getCurrentItem()) {
         const newScrollLeft = itemWidth.value * index
         setScrollLeft(newScrollLeft)
@@ -212,7 +234,8 @@ export default defineComponent({
     }
 
     const onFinishScrollingThrottled = useThrottleFn(() => {
-      currentItem.value = getCurrentItem()
+      scopedCurrentItem.value = getCurrentItem()
+      emit('update:current-item', scopedCurrentItem.value)
     }, 300)
 
     let prevScrollLeft = 0
@@ -224,12 +247,12 @@ export default defineComponent({
 
       // move to right on any move
       if (prevScrollLeft < scrollLeft) {
-        const newScrollLeft = (itemWidth.value * currentItem.value)
+        const newScrollLeft = (itemWidth.value * scopedCurrentItem.value)
         setScrollLeft(newScrollLeft)
       }
       // move to left if the carousel is scrolled more than previewSize
-      else if (Math.abs((itemWidth.value * currentItem.value) - scrollLeft) > (props.previewSize + 2)) {
-        const newScrollLeft = (itemWidth.value * (currentItem.value - 1)) - props.previewSize
+      else if (Math.abs((itemWidth.value * scopedCurrentItem.value) - scrollLeft) > (props.previewSize + 2)) {
+        const newScrollLeft = (itemWidth.value * (scopedCurrentItem.value - 1)) - props.previewSize
         setScrollLeft(newScrollLeft)
       }
 
@@ -281,6 +304,9 @@ export default defineComponent({
       resizeObserver.observe(trackRef.value as HTMLElement)
 
       initialized.value = true
+
+      if (scopedCurrentItem.value !== 0)
+        onMoveTo(scopedCurrentItem.value)
     })
     onBeforeUnmount(() => {
       resizeObserver?.disconnect()
@@ -305,6 +331,11 @@ export default defineComponent({
       width: `calc((100% - ${props.previewSize}px) / ${props.itemsToShow})`,
     }))
 
+    expose({
+      onMove,
+      onMoveTo,
+    })
+
     return {
       trackRef,
 
@@ -313,7 +344,7 @@ export default defineComponent({
       initialized,
       disabledSide,
       indicatorOptions,
-      currentItem,
+      scopedCurrentItem,
       onMove,
       onMoveTo,
       onTrackScroll,
@@ -338,7 +369,7 @@ export default defineComponent({
       :on-move="onMove"
       :on-move-to="onMoveTo"
       :disabled-side="disabledSide"
-      :current-item="currentItem"
+      :current-item="scopedCurrentItem"
       :items="items"
       :initialized="initialized"
       v-bind="layoutProps"
