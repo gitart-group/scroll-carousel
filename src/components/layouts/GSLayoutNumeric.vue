@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PropType } from 'vue'
-import { defineAsyncComponent, defineComponent } from 'vue'
+import { computed, defineAsyncComponent, defineComponent } from 'vue'
 
 const GSArrow = defineAsyncComponent(() => import('../GSArrow.vue'))
 
@@ -22,6 +22,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    currentItemByPercent: {
+      type: Number,
+      required: true,
+    },
     items: {
       type: Array as PropType<any[]>,
       required: true,
@@ -40,6 +44,21 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+
+    percentCounter: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  setup(props) {
+    const counter = computed(() => {
+      return (props.percentCounter ? props.currentItemByPercent : props.currentItem) + 1
+    })
+
+    return {
+      counter,
+    }
   },
 })
 </script>
@@ -70,7 +89,7 @@ export default defineComponent({
         v-if="!disableCounter"
         class="gsl-numeric__contorls-text"
       >
-        {{ currentItem + 1 }}
+        {{ counter }}
         <span>
           /
         </span>

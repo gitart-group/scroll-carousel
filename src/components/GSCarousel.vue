@@ -115,8 +115,11 @@ export default defineComponent({
       barWidthPercent: 0,
     })
 
-    // TODO check or delete this
-    let scrollListenerTimerId: ReturnType<typeof setTimeout>
+    const currentItemByPercent = computed(() => {
+      const scrollPercent = (indicatorOptions.barOffsetPercent / (100 - indicatorOptions.barWidthPercent))
+      const item = Math.floor(scrollPercent * (props.items.length - 1))
+      return item
+    })
 
     const {
       setImmediately,
@@ -140,10 +143,6 @@ export default defineComponent({
     })
 
     const setScrollLeft = (newScrollLeft: number, smooth = true) => {
-      // Clear timer. It would break the carousel if the timer is waiting to be executed.
-      // TODO check or delete this
-      clearTimeout(scrollListenerTimerId)
-
       if (smooth) {
         const currentScrollLeft = trackRef.value!.scrollLeft
         setSmoothly(newScrollLeft, currentScrollLeft)
@@ -216,7 +215,6 @@ export default defineComponent({
 
     const onMoveTo = (index: number) => {
       if (!itemWidth.value) {
-        console.warn('setTimeout run')
         setTimeout(() => {
           onMoveTo(index)
         }, 50)
@@ -345,6 +343,7 @@ export default defineComponent({
       disabledSide,
       indicatorOptions,
       scopedCurrentItem,
+      currentItemByPercent,
       onMove,
       onMoveTo,
       onTrackScroll,
@@ -370,6 +369,7 @@ export default defineComponent({
       :on-move-to="onMoveTo"
       :disabled-side="disabledSide"
       :current-item="scopedCurrentItem"
+      :current-item-by-percent="currentItemByPercent"
       :items="items"
       :initialized="initialized"
       v-bind="layoutProps"
@@ -396,7 +396,6 @@ export default defineComponent({
           </div>
         </div>
       </template>
-
       <template #indicator>
         <GSIndicator
           :bar-offset-percent="indicatorOptions.barOffsetPercent"
