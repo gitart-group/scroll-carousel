@@ -49,6 +49,8 @@ export default defineComponent({
     position: relative;
     z-index: 2;
     border-width: 0 2px 2px 0;
+    border-style: solid;
+    border-color: #fff;
     display: inline-block;
     padding: 5px;
     vertical-align: middle;
