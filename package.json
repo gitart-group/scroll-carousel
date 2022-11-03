@@ -1,6 +1,6 @@
 {
   "name": "gitart-scroll-carousel",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "scripts": {
     "dev": "vite --config dev/vite.config.ts",
     "dev:build": "vite build --config dev/vite.config.ts",
