@@ -87,7 +87,7 @@ export default defineComponent({
 
     const barStyle = computed(() => {
       return {
-        width: `${props.barWidthPercent}%`,
+        width: `2px`,
         left: `${props.barOffsetPercent}%`,
       }
     })
@@ -114,12 +114,13 @@ export default defineComponent({
       'gsc-indicator--scrolling': moving,
     }"
   >
-    <div class="gsc-indicator__track" @click="onTrackClick" />
     <div
-      class="gsc-indicator__bar"
-      :style="barStyle"
-      @mousedown="onMouseDown"
+        class="gsc-indicator__bar"
+        :style="barStyle"
+        @mousedown="onMouseDown"
     />
+    <div class="gsc-indicator__track" @click="onTrackClick" />
+
   </div>
 </template>
 
