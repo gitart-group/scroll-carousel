@@ -1,10 +1,11 @@
 import path from 'path'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss'
-import Checker from 'vite-plugin-checker'
+import { checker } from 'vite-plugin-checker'
 import Terminal from 'vite-plugin-terminal'
 
 const resolve = (str: string) => path.resolve(__dirname, str)
@@ -14,7 +15,7 @@ export default defineConfig({
 
   plugins: [
     vue(),
-    Checker({
+    checker({
       vueTsc: false,
       overlay: false,
     }),
@@ -30,7 +31,10 @@ export default defineConfig({
           if ([
             'GSCarousel',
           ].includes(name))
-            return { importName: name, path: 'gitart-scroll-carousel' }
+            return {
+              name,
+              from: 'gitart-scroll-carousel',
+            }
 
           return null
         },

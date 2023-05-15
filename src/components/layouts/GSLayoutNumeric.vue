@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { PropType } from 'vue'
+
 import { computed, defineAsyncComponent, defineComponent } from 'vue'
 
 const GSArrow = defineAsyncComponent(() => import('../GSArrow.vue'))

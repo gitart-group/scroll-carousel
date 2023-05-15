@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { ComponentPublicInstance, PropType, ShallowUnwrapRef } from 'vue'
+
 import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useDebounceFn, useThrottleFn } from '@vueuse/core'
 
@@ -367,7 +368,7 @@ export default defineComponent({
     :style="styles"
   >
     <Component
-      :is="layout"
+      :is="(layout as any)"
       :on-move="onMove"
       :on-move-to="onMoveTo"
       :disabled-side="disabledSide"

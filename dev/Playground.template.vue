@@ -36,9 +36,7 @@ const itemsToShow = computed(() => {
       :items="items"
       item-gap="16 10"
       :items-to-show="itemsToShow"
-      :layout="{
-        compoment: GSLayoutDefault
-      }"
+      :layout="GSLayoutDefault"
     >
       <template #item="{ index, data }">
         <div class="slide h-full border-1 rounded-lg overflow-hidden">
@@ -60,9 +58,7 @@ const itemsToShow = computed(() => {
     <GSCarousel
       :items="items"
       :items-to-show="2"
-      :layout="{
-        compoment: GSLayoutDefault
-      }"
+      :layout="GSLayoutDefault"
     >
       <template #item="{ index }">
         <div class="border-1">
